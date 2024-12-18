@@ -1,0 +1,50 @@
+name: Terraform Workflow
+
+on:
+  push:
+    branches:
+      - "**"  # Trigger on all branches for plan
+  pull_request:
+    branches:
+      - main  # Trigger on PRs to main branch
+  workflow_dispatch:  # Manual trigger for destroy
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7  # Use your desired version
+
+      # Step 3: Terraform Init
+      - name: Initialize Terraform
+        run: terraform init
+
+      # Step 4: Terraform Plan (For Push Events)
+      - name: Terraform Plan
+        if: github.event_name == 'push'
+        run: terraform plan
+
+      # Step 5: Terraform Apply (For Merge to Main)
+      - name: Terraform Apply
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        run: terraform apply -auto-approve
+
+      # Step 6: Terraform Destroy (For Manual Trigger)
+      - name: Terraform Destroy
+        if: github.event_name == 'workflow_dispatch'
+        run: terraform destroy -auto-approve
