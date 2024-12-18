@@ -1,9 +1,8 @@
-# Define the Azure Provider
 terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+      version = "~> 3.0"  # Ensure you're using a compatible version
     }
   }
 
@@ -11,6 +10,7 @@ terraform {
 }
 
 provider "azurerm" {
+  features {}  # This is required in newer versions of the provider
 }
 
 # Create a Resource Group
