@@ -10,15 +10,22 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}  # This is required in newer versions of the provider
-  subscription_id = var.ARM_SUBSCRIPTION_ID
-  client_id       = var.ARM_CLIENT_ID
-  client_secret   = var.ARM_CLIENT_SECRET
-  tenant_id       = var.ARM_TENANT_ID
+
+  # Authentication from environment variables
+  subscription_id = var.arm_subscription_id
+  client_id       = var.arm_client_id
+  client_secret   = var.arm_client_secret
+  tenant_id       = var.arm_tenant_id
 }
 
-# Create a Resource Group
 resource "azurerm_resource_group" "example" {
-  name     = var.resource_group_name
-  location = var.location
+  name     = "example-resource-group"
+  location = "East US"  # Specify the location (e.g., East US, West Europe)
 }
+
+# Define variables to be passed in from GitHub Secrets
+variable "arm_subscription_id" {}
+variable "arm_client_id" {}
+variable "arm_client_secret" {}
+variable "arm_tenant_id" {}
+
