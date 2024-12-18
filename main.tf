@@ -1,17 +1,6 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.0"  # Ensure you're using a compatible version
-    }
-  }
-
-  required_version = ">= 1.3.0"
-}
-
 provider "azurerm" {
+  features {}
 
-  # Authentication from environment variables
   subscription_id = var.arm_subscription_id
   client_id       = var.arm_client_id
   client_secret   = var.arm_client_secret
@@ -28,4 +17,3 @@ variable "arm_subscription_id" {}
 variable "arm_client_id" {}
 variable "arm_client_secret" {}
 variable "arm_tenant_id" {}
-
