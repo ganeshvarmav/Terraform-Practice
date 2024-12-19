@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "example" {
   location = "East US"  # Specify the location (e.g., East US, West Europe)
 }
 
-# Define variables to be passed in from GitHub Secrets
+
 variable "arm_subscription_id" {}
 variable "arm_client_id" {}
 variable "arm_client_secret" {}
